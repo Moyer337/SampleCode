@@ -1,0 +1,57 @@
+`comment("These commands are useful for new employees trying to map out the new Splunk environment they've been dropped into.")`
+| metadata type=sourcetypes |table sourcetype
+
+`comment("This command should list out all indexes that your current account has visibility into. 
+You still need to look around in these indexes to see if they actually contain useful data.")`
+| metadata type=index | table index
+
+`comment("Here are all sourcetypes with their associated indexes. If you want to jump straight to the point, I'd run this one first.")`
+| tstats values(sourcetype) where index=* group by index
+
+`comment("Now that you have a basic mapping, and based on your given role, you should also look for the Add-ons your organization already
+has installed and configured. Odds are that you have at least a dozen tools to work with. There should be one for your HIDS, NIDS, Firewall,
+and if you're really lucky, there might be a tool for your CMDB and ticketing system. Some of these will most likely require an 
+individual API key if your org sets up individual accounts for accessing various tools. Gigamon/ThreatINSIGHT has an individual API key
+required for you so that you can develop and maintain your own detections and queries before deploying them to your org as a whole. 
+VirusTotal has an API that would be used by your org as a whole. Same thing for CB Defense. Please refer to the documentation of your 
+various Add-ons or your org's documentation on what steps you as a new user would need to take to ready the various Splunk tools for use.")`
+
+`comment("Now that you have a general understanding of your overall environment, I would sugggest you take a look at what dashboards and
+reports your org already has published. These should give you some insight as to what the org has focused on in the past, and what their
+folks may want to improve upon now that you're here. You can also view the source code of a given dashboard or report by hovering your
+mouse over the bottom-right corner of a given panel, look for the magnifying glass and choose to run the query in a different tab. This
+will show you how sophisticated and mature your org is with Splunk at the moment. While reviewing the code, take note of a few things: 
+do the reports/dashboards make use of macros, lookups, CSV files or add-on commands. VirusTotal (VT), when installed AND configured, allows 
+users to utilize the | virustotal command to pass hashes to the VT API and return threat scores, first time seen, last seen, and other 
+useful bits of information. If your organization is still writing all code from scratch in every report and dashboard, this can be a quick 
+way to set yourself apart from your peers. Look for reused code, polish it up, make it into a macro. Clone an existing dashboard, plug in 
+your macro and see what needs to be changed in the overall dashboard to keep it working. This can help streamline production of new 
+resources for Splunk users, while giving you some time to familiarize yourself with what your team needs to be further developed. After a 
+while, do the same with lookups. If you're screening out the same values or tables frequently, put them into a lookup and save everyone 
+some time and hassle.")`
+
+`comment("Let's look at some sample code you might use to look for network traffic coming into your network. If there are geographic IP 
+ranges your company does not need accessing your resources, then this should help to identify outliers.")`
+index=firewall sourcetype=barracuda 
+| src.ip!=10.1.*.* AND dst.ip=10.1.*.*
+| chart dst.ip
+
+`comment("")`
+
+
+`comment("")`
+
+
+`comment("")`
+
+
+`comment("")`
+
+
+`comment("")`
+
+
+`comment("")`
+
+
+`comment("")`
